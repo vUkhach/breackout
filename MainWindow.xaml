@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:breakout"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        ResizeMode = "NoResize"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Canvas Name="GameCanvas" Background="Black"/>
+        <TextBlock Name="ScoreText"
+           Foreground="White"
+           FontSize="20"
+           Margin="10"/>
     </Grid>
 </Window>

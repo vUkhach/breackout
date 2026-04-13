@@ -26,6 +26,7 @@ namespace breakout
         private Rectangle paddleShape;
         private List<Block> blocks = new List<Block>();
         private List<Rectangle> blockShapes = new List<Rectangle>();
+        private int score = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -55,6 +56,9 @@ namespace breakout
             DrawBall();
             DrawPaddle();
             DrawBlocks();
+            ScoreText.Text = $"Score: {score}";
+            CheckWin();
+            CheckLoose();
         }
 
         private void DrawBall()
@@ -118,7 +122,7 @@ namespace breakout
                 ballRight >= paddleLeft &&
                 ballLeft <= paddleRight) 
             {
-                ball.BounceY();
+                HandleCollision(paddle.X, paddle.Y, paddle.Width, paddle.Heigth, true);
                 ball.SetPosition(ball.X, paddle.Y - ball.Size);
             }
         }
@@ -138,6 +142,7 @@ namespace breakout
                 if (collision)
                 {
                     block.Destroy();
+                    score += 10;
                     ball.BounceY();
                     break;
                 }
@@ -171,16 +176,20 @@ namespace breakout
         private void CreateBlocks()
         {
             int rows = 5;
-            int cols = 8;
+            int cols = 10;
 
-            double startX = 50;
-            double startY = 50;
+            double blockWidth = 70;
+            double blockHeight = 25;
+            double paddingX = 5;
+            double paddingY = 5;
+            double startX = 15;
+            double startY = 15;
 
             for(int i = 0; i < rows; i++)
             {
                 for(int j = 0; j < cols; j++)
                 {
-                    Block block = new Block(startX + j * 70, startY + i * 30);
+                    Block block = new Block(startX + j * (blockWidth + paddingX), startY + i * (blockHeight + paddingY));
                     blocks.Add(block);
 
                     Rectangle rect = new Rectangle
@@ -215,6 +224,74 @@ namespace breakout
                 Canvas.SetLeft(shape, block.X);
                 Canvas.SetTop(shape, block.Y);
             }
+        }
+
+        private void HandleCollision(double objX, double objY, double objW, double objH, bool isPaddle)
+        {
+            double ballCenterX = ball.X + ball.Size / 2;
+            double ballCenterY = ball.Y + ball.Size / 2;
+
+            double objCenterX = objX + objW / 2;
+            double objCenterY = objY + objH / 2;
+
+            double dx = ballCenterX - objCenterX;
+            double dy = ballCenterY - objCenterY;
+
+            if (isPaddle)
+            {
+                double relative = (ballCenterX - objX) / objW;
+                double newDx = (relative - 0.5) * 6;
+                double newDy = -Math.Abs(3);
+
+                ball.SetDirection(newDx, newDy);
+            }
+            else
+            {
+                if (Math.Abs(dx) > Math.Abs(dy))
+                    ball.BounceX();
+                else
+                    ball.BounceY();
+            }
+        }
+
+        private void CheckWin()
+        {
+            bool allDestroyed = blocks.All(b => b.IsDestroyed);
+
+            if (allDestroyed)
+            {
+                gameTimer.Stop();
+                MessageBox.Show("You win");
+                RestartGame();
+                gameTimer.Start();
+                return;
+            }
+        }
+
+        private void CheckLoose()
+        {
+            if(ball.Y > GameCanvas.ActualHeight)
+            {
+                gameTimer.Stop();
+                MessageBox.Show("You loose");
+                RestartGame();
+                gameTimer.Start();
+            }
+        }
+
+        private void RestartGame()
+        {
+            score = 0;
+
+            blocks.Clear();
+            blockShapes.Clear();
+            GameCanvas.Children.Clear();
+
+            ballShape = null;
+            paddleShape = null;
+
+            CreateBlocks();
+            SpawnBall();
         }
     }
 }
