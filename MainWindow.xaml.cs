@@ -338,13 +338,14 @@ namespace breakout
                 gameTimer.Stop();
 
                 var window = new GameOverWindow(score);
+                this.Hide();
                 window.ShowDialog();
 
                 if (window.Restart)
                 {
+                    this.Show();
                     RestartGame();
                     gameTimer.Start();
-                    lives = 3;
                 }
                 return;
             }
@@ -364,14 +365,15 @@ namespace breakout
                 if (lives <= 0)
                 {
                     gameTimer.Stop();
-
+                    
                     var window = new GameOverWindow(score);
+                    this.Hide();
                     window.ShowDialog();
                     if (window.Restart)
                     {
+                        this.Show();
                         RestartGame();
-                        gameTimer.Start();
-                        
+                        gameTimer.Start();                        
                     }
                 }
                 else

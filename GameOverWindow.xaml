@@ -13,19 +13,19 @@
                    FontSize="20"
                    Margin="0,20"
                    TextAlignment="Center"
-                   Foreground="White"/>
+                   Foreground="White" FontFamily="Cascadia Code"/>
 
         <Button Content="Restart Game"
                 Width="150"
                 Margin="10"
                 Click="Restart_Click"
-                Background="White"/>
+                Background="White" FontFamily="Cascadia Code"/>
 
         <Button Content="Leaderboard"
                 Width="150"
                 Margin="10"
                 Click="Table_Click"
-                Background="White"/>
+                Background="White" FontFamily="Cascadia Code"/>
 
     </StackPanel>
 </Window>
