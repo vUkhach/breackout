@@ -365,7 +365,7 @@ namespace breakout
                 if (lives <= 0)
                 {
                     gameTimer.Stop();
-                    
+                    SaveResult();
                     var window = new GameOverWindow(score);
                     this.Hide();
                     window.ShowDialog();
@@ -415,6 +415,22 @@ namespace breakout
                     Fill = i < lives ? Brushes.White : new SolidColorBrush(Color.FromRgb(40, 40, 40))
                 };
                 LivesPanel.Children.Add(heart);
+            }
+        }
+
+        private void SaveResult()
+        {
+            using (var db = new GameDbContext())
+            {
+                var result = new GameResult
+                {
+                    Score = score,
+                    TimeSeconds = gameTime / 1000,
+                    Date = DateTime.Now
+                };
+
+                db.Results.Add(result);
+                db.SaveChanges();
             }
         }
     }
