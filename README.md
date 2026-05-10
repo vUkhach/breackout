@@ -29,7 +29,7 @@ This project is a feature-rich desktop adaptation of the classic arcade game, Br
 ## 💻 Getting Started
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/vUkhach/breakout.git
    ```
 2. Open the `breakout.sln` solution file in Visual Studio.
 3. Build the project to automatically restore the required NuGet packages (Entity Framework Core, xUnit).
